@@ -31,7 +31,7 @@ that you would like to add second factor on top without changing any application
 
 Here is a diagram of authentication process (simplified for clarity).
 
-![SAML Workflow](https://raw.githubusercontent.com/notakey-examples/blackbox-webapp-2fa-howto/master/images/blackbox-saml.png)
+![SAML Workflow](images/blackbox-saml.png)
 
 ### Description of steps:
 
@@ -154,7 +154,7 @@ $ docker run -d \
 
 - Check logs for any configuration errors with `docker logs myapp-proxy`
 
-### 4. Register your Service Provider (SP) with Identity Provider
+### 5. Register your Service Provider (SP) with Identity Provider
 
 - Fetch SP metadata from reverse proxy service metadata URL. If using default configuration URL to metadata will be https://myapp.example.com/saml/metadata. If you have metadata authentication enabled, you will need to access this link via federation page (https://idp.example.com/sso/module/core/frontpage_federation).
 
@@ -236,7 +236,7 @@ $ ntk cfg set :sso.\"saml-sp\".\"https://myapp.example.com\" '{
 - Navigate to https://myapp.example.com and verify that you are being redirected to IdP and authentication works.
 
 
-### (Optional) Running SP reverse proxy on Notakey Appliance
+### 6. (Optional) Running SP reverse proxy on Notakey Appliance
 
 It is posssible to run custom services on Notakey appliance reusing existing HTTP SSL wildcard certificates or ACME configuration. If your blackbox app ir reachable directly from Notakey Appliance, you can deploy authentication reverse proxy directly on appliance nodes.
 
