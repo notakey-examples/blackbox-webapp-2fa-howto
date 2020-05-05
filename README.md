@@ -205,7 +205,7 @@ $ wget https://myapp.example.com/saml/metadata -O sp-metadata.xml
 }
 ```
 
-- Take this output and convert to appliance command. All service providers are located under :sso.\"saml-sp\" configuration path. Entity ID is the identifier for the IdP to identify your SP. The entity ID of service must match the key under which the SP is defined, so the full configuration path is :sso.\"saml-sp\".\"https://myapp.example.com\"
+- Take this output and convert to appliance command. All service providers are located under `:sso.\"saml-sp\"` configuration path. Entity ID is the identifier for the IdP to identify your SP. The entity ID of service must match the key under which the SP is defined, so the full configuration path is `:sso.\"saml-sp\".\"https://myapp.example.com\"`
 
 ```shell
 $ ntk cfg set :sso.\"saml-sp\".\"https://myapp.example.com\" '{
