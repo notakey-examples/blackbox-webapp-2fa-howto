@@ -35,23 +35,23 @@ Here is a diagram of authentication process (simplified for clarity).
 
 ### Description of steps:
 
-* 1. Web browser requests protected URL of your blackbox webapp from reverse proxy.
+* (1.) Web browser requests protected URL of your blackbox webapp from reverse proxy.
 
-* 2. Reverse proxy redirects browser to identity provider (IdP).
+* (2.) Reverse proxy redirects browser to identity provider (IdP).
 
-* 3. IdP follows configured security requirements and requests user to authenticate.
+* (3.) IdP follows configured security requirements and requests user to authenticate.
 
-  * 3.1. After entering username, an authentication request is sent to user in NtkAS.
+  * (3.1.) After entering username, an authentication request is sent to user in NtkAS.
 
-  * 3.2. NtkAS sends this request to users mobile app.
+  * (3.2.) NtkAS sends this request to users mobile app.
 
-  * 3.3. If user approves the request, response is signed and sent back to NtkAS, that in turn responds to SSO service.
+  * (3.3.) If user approves the request, response is signed and sent back to NtkAS, that in turn responds to SSO service.
 
-* 4. If authentication is validated successfully, users browser is redirected back to reverse proxy together with signed SAML assertion.
+* (4.) If authentication is validated successfully, users browser is redirected back to reverse proxy together with signed SAML assertion.
 
-* 5. Browser sends request again for protected resource including SAML assertion from IdP. Reverse proxy verifies signature against certificate in configured IdP metadata.
+* (5.) Browser sends request again for protected resource including SAML assertion from IdP. Reverse proxy verifies signature against certificate in configured IdP metadata.
 
-  * 5.1. If signature is valid reverse proxy passes the request through to backend blackbox webapp.
+  * (5.1.) If signature is valid reverse proxy passes the request through to backend blackbox webapp.
 
 
 ## Configuration steps
