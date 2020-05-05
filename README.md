@@ -23,7 +23,7 @@ Configuration example of adding Notakey Multi Factor authentication to a legacy 
 - You have a web application that has no authentication or has its own implementation (a blackbox)
 that you would like to add second factor on top without changing any application code.
 
-- Blackbox application can be isolated from direct access on infrastructure level (e.g. with firewall) or it can be deployed as a container in docker infrastructure where it can be isolated by deploying in dedicated network (not covered here).
+- Your blackbox application can be isolated from direct access on infrastructure level (e.g. with firewall) or it can be deployed as a container in docker infrastructure where it can be isolated by deploying in dedicated network (not covered here).
 
 - All required HTTP SSL certificates and DNS configuration is in place.
 
@@ -47,7 +47,7 @@ Here is a diagram of authentication process (simplified for clarity).
 
   * 3.3. If user approves the request, response is signed and sent back to NtkAS, that in turn responds to SSO service.
 
-4. If authentication is validated successfully, users browser is redirected back to reverse proxy togather with signed SAML assertion.
+4. If authentication is validated successfully, users browser is redirected back to reverse proxy together with signed SAML assertion.
 
 5. Browser sends request again for protected resource including SAML assertion from IdP. Reverse proxy verifies signature against certificate in configured IdP metadata.
 
@@ -58,7 +58,7 @@ Here is a diagram of authentication process (simplified for clarity).
 
 ### 1. Generate metadata and certificates for authentication request signing
 
-  - Generate metadata XML and certificates with `mellon_create_metadata.sh`
+  - Generate SAML SP certificates with `mellon_create_metadata.sh`
 
 ```shell
 $ mkdir ./mellon-config
@@ -85,7 +85,7 @@ $ ls -al mellon-config/
 
 ### 2. Retrieve SAML Identity Provider metadata
 
-- If you have deployed SSO service on FQDN idp.example.com, your metadata URL will be https://idp.example.com/sso/saml2/idp/metadata
+- If you have deployed SSO service on FQDN idp.example.com, your metadata URL will be https://idp.example.com/sso/saml2/idp/metadata. If you have metadata authentication enabled, you will need to access this link via federation page (https://idp.example.com/sso/module/core/frontpage_federation).
 
 ```shell
 $ wget https://idp.example.com/sso/saml2/idp/metadata -O mellon-config/metadata.xml
@@ -98,7 +98,7 @@ $ wget https://idp.example.com/sso/saml2/idp/metadata -O mellon-config/metadata.
 -  Configure SP server name (SP FQDN)
 
 ```
-ServerName https://myapp.example.com
+ServerName myapp.example.com
 ```
 
 -  Configure your backend (URL to blackbox you will be protecting)
@@ -113,6 +113,12 @@ ServerName https://myapp.example.com
 
 ```
 MellonUser "uid"
+```
+
+- Adjust the Entity ID of your SP. This value will be used by IdP to identify your service.
+
+```
+MellonSPentityId "https://myapp.example.com"
 ```
 
 - Adjust certificate file names generated in step 1.
@@ -131,7 +137,7 @@ MellonUser "uid"
 ```
     # SSL Config - update SSL with your own cert files
     SSLEngine On
-    # Remember copy your certificate files in volume passed to decker container
+    # Remember copy your certificate files in volume passed to docker container
     SSLCertificateFile /mellon/my_ssl.crt
     SSLCertificateKeyFile /mellon/my_ssl.key
     SSLCertificateChainFile /mellon/my_ssl.ca.crt
@@ -156,14 +162,13 @@ $ docker run -d \
 
 ### 5. Register your Service Provider (SP) with Identity Provider
 
-- Fetch SP metadata from reverse proxy service metadata URL. If using default configuration URL to metadata will be https://myapp.example.com/saml/metadata. If you have metadata authentication enabled, you will need to access this link via federation page (https://idp.example.com/sso/module/core/frontpage_federation).
+- Fetch SP metadata from reverse proxy service metadata URL. If using default configuration, URL to metadata will be https://myapp.example.com/saml/metadata.
 
 ```shell
 $ wget https://myapp.example.com/saml/metadata -O sp-metadata.xml
 ```
 
-
-- Authenticate to open federation page on your SSO service (https://idp.example.com/sso/module/core/frontpage_federation)
+- Open federation page on your SSO service (https://idp.example.com/sso/module/core/frontpage_federation)
 
 - Click on "XML metadata to JSON converter"
 
@@ -198,8 +203,9 @@ $ wget https://myapp.example.com/saml/metadata -O sp-metadata.xml
         }
     ]
 }
+```
 
-- Take this output and convert to appliance command. All service providers are located under :sso.\"saml-sp\" configuration path. Entity ID is the identifier for the IdP to recognize your SP. The entity ID of service must match the key under which the SP is defined, so the full configuration path is :sso.\"saml-sp\".\"https://myapp.example.com\"
+- Take this output and convert to appliance command. All service providers are located under :sso.\"saml-sp\" configuration path. Entity ID is the identifier for the IdP to identify your SP. The entity ID of service must match the key under which the SP is defined, so the full configuration path is :sso.\"saml-sp\".\"https://myapp.example.com\"
 
 ```shell
 $ ntk cfg set :sso.\"saml-sp\".\"https://myapp.example.com\" '{
@@ -283,4 +289,4 @@ $ docker run -d \
 
 As with any production service be sure to check out public vulnerability databases before deploying, as mod_auth_mellon has had several security vulnerabilities in the past.
 
-Apache configuration files saml-standalone.conf and saml-appliance.conf are provided as mere examples and should be matched to your security and scaling requirements.
+Apache configuration files saml-standalone.conf and saml-appliance.conf are provided as mere examples and should be adjusted to your security and scaling requirements.
