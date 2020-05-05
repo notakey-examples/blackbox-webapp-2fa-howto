@@ -41,17 +41,17 @@ Here is a diagram of authentication process (simplified for clarity).
 
 3. IdP follows configured security requirements and requests user to authenticate.
 
-  3.1. After entering username, an authentication request is sent to user in NtkAS.
+  1. After entering username, an authentication request is sent to user in NtkAS.
 
-  3.2. NtkAS sends this request to users mobile app.
+  2. NtkAS sends this request to users mobile app.
 
-  3.3. If user approves the request, response is signed and sent back to NtkAS, that in turn responds to SSO service.
+  3. If user approves the request, response is signed and sent back to NtkAS, that in turn responds to SSO service.
 
 4. If authentication is validated successfully, users browser is redirected back to reverse proxy togather with signed SAML assertion.
 
 5. Browser sends request again for protected resource including SAML assertion from IdP. Reverse proxy verifies signature against certificate in configured IdP metadata.
 
-  5.1. If signature is valid reverse proxy passes the request through to backend blackbox webapp.
+  1. If signature is valid reverse proxy passes the request through to backend blackbox webapp.
 
 
 ## Configuration steps
