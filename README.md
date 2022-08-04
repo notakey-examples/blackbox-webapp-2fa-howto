@@ -14,9 +14,9 @@ Configuration example of adding Notakey Multi Factor authentication to a legacy 
 
 - Working Notakey Authentication Appliance (NtkAA), get it [here](https://www.notakey.com/downloads/).
 
-- Working Notakey Authentication Service (NtkAS) service, more info [here](https://documentation.notakey.com/naa/#authentication-server).
+- Working Notakey Authentication Service (NtkAS) service, more info [here](https://documentation.notakey.com/cli/5.0.80/#authentication-server).
 
-- Working Single Sign On (SSO) service that comes with NtkAA, more info [here](https://documentation.notakey.com/naa/#single-sign-on-server).
+- Working Single Sign On (SSO) service that comes with NtkAA, more info [here](https://documentation.notakey.com/cli/5.0.80/#single-sign-on-server).
 
 ## Assumptions
 
